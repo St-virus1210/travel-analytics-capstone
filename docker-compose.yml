@@ -1,0 +1,24 @@
+services:
+  api:
+    build: .
+    image: travel-analytics-api:local
+    ports:
+      - "5000:5000"
+    environment:
+      MODEL_DIR: /app/artifacts
+      DATA_DIR: /app/data
+    volumes:
+      - ./artifacts:/app/artifacts:ro
+      - ./data:/app/data:ro
+  dashboard:
+    build: .
+    image: travel-analytics-dashboard:local
+    entrypoint: ["streamlit"]
+    command: ["run", "src/travel_analytics/dashboard.py", "--server.address=0.0.0.0"]
+    ports:
+      - "8501:8501"
+    environment:
+      DATA_DIR: /app/data
+      API_URL: http://api:5000
+    depends_on:
+      - api

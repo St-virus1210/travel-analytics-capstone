@@ -1,0 +1,18 @@
+{
+  "flights": {
+    "rows": 271888,
+    "columns": 10,
+    "missing_values": 0
+  },
+  "hotels": {
+    "rows": 40552,
+    "columns": 8,
+    "missing_values": 0
+  },
+  "users": {
+    "rows": 1340,
+    "columns": 5,
+    "missing_values": 0
+  },
+  "note": "Counts and missing values from initial inspection of uploaded CSVs."
+}
