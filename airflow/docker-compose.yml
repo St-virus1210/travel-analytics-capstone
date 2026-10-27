@@ -1,0 +1,41 @@
+services:
+  mlflow:
+    image: python:3.11-slim
+    working_dir: /mlflow
+    command: >-
+      sh -c "pip install --no-cache-dir 'mlflow>=2.10,<4.0' && mlflow server --host 0.0.0.0 --port 5000 --backend-store-uri sqlite:////mlflow/mlflow.db --serve-artifacts --artifacts-destination /mlflow/artifacts"
+    ports: ["5001:5000"]
+    volumes: [mlflow_data:/mlflow]
+    healthcheck:
+      test: ["CMD","python","-c","import urllib.request; urllib.request.urlopen('http://localhost:5000/health')"]
+      interval: 20s
+      timeout: 5s
+      retries: 10
+      start_period: 60s
+  airflow:
+    build:
+      context: ..
+      dockerfile: airflow/Dockerfile
+    command: standalone
+    ports: ["8080:8080"]
+    environment:
+      AIRFLOW__CORE__LOAD_EXAMPLES: "False"
+      AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: "False"
+      AIRFLOW__CORE__DAGS_FOLDER: /opt/airflow/dags
+      TRAVEL_PROJECT_DIR: /opt/travel-analytics
+      PYTHONPATH: /opt/travel-analytics/src
+      MLFLOW_TRACKING_URI: http://mlflow:5000
+    volumes:
+      - ..:/opt/travel-analytics
+      - ./dags:/opt/airflow/dags
+    depends_on:
+      mlflow:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD","curl","--fail","http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 120s
+volumes:
+  mlflow_data:
