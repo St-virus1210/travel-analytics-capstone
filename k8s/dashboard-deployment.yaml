@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: travel-analytics-dashboard
+spec:
+  replicas: 1
+  selector:
+    matchLabels: {app: travel-analytics-dashboard}
+  template:
+    metadata:
+      labels: {app: travel-analytics-dashboard}
+    spec:
+      containers:
+      - name: dashboard
+        image: travel-analytics-dashboard:local
+        imagePullPolicy: IfNotPresent
+        command: ["streamlit"]
+        args: ["run","streamlit/app.py","--server.address=0.0.0.0","--server.port=8501"]
+        ports: [{containerPort: 8501}]
+        env:
+        - {name: DATA_DIR, value: /app/data}
+        - {name: API_URL, value: http://travel-analytics-api:5000}
