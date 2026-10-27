@@ -1,0 +1,8 @@
+{
+  "metrics": {
+    "accuracy": 0.36716417910447763,
+    "balanced_accuracy": 0.3673605524269241,
+    "macro_f1": 0.32073414426203595
+  },
+  "note": "Academic sensitive-attribute classification demonstration only; do not use for decisions about people."
+}
