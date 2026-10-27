@@ -1,0 +1,17 @@
+{
+  "candidate_metrics": {
+    "ridge": {
+      "mae": 81.38989108999348,
+      "rmse": 103.15159216088286,
+      "r2": 0.92019186791308
+    },
+    "random_forest": {
+      "mae": 0.135863233629279,
+      "rmse": 1.0740056872333115,
+      "r2": 0.9999913481608451
+    }
+  },
+  "selection_metric": "mae",
+  "selected_model": "random_forest",
+  "note": "Metrics from a reproducible 50,000-row sample and random hold-out split. Investigate unusually high Random Forest R2 for leakage/generalization."
+}
